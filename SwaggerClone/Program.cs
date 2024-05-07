@@ -1,3 +1,4 @@
+using SwaggerCloneLibrary.Interfaces;
 using SwaggerCloneLibrary.Services;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -5,9 +6,7 @@ var builder = WebApplication.CreateBuilder(args);
 // Add services to the container.
 builder.Services.AddRazorPages();
 builder.Services.AddHttpClient();
-builder.Services.AddSingleton<ApiAccess>();
-
-
+builder.Services.AddSingleton<IApiAccess, ApiAccess>();
 
 var app = builder.Build();
 

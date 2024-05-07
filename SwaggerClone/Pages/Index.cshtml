@@ -4,20 +4,31 @@
     ViewData["Title"] = "Home page";
 }
 
-<div class="text-center">
-    <h1 class="display-4">Swagger Clone UI by Christoffer Sladin</h1>
-
-    <h2>Fetch Data from API</h2>
+<div class="main-container text-center">
+    <h1 class="display-4 title">Swagger Clone</h1>
 
     <form method="post" asp-page-handler="FetchApi">
         <label for="endpoint">API Endpoint:</label>
-        <input type="text" id="endpoint" name="Endpoint" style="width: 60%;" />
+        <input type="text" id="endpoint" name="Endpoint" />
         <button type="submit">Fetch</button>
+
+        <div></div>
+
+        <label for="formatToJson">Format as JSON:</label>
+        <input type="checkbox" id="formatJson" name="FormatJson" checked="@Model.FormatJson" />
+
     </form>
 
-    <hr />
+    <hr class="divider" />
 
-    <div style="border: 1px solid black; width: 80%; height: 300px; overflow-y: scroll;">
-        <pre>@Model.ApiResponse</pre>
+    <div class="response-container">
+        @if (!string.IsNullOrEmpty(Model.ApiResponse))
+        {
+            <pre class="response-display">@Html.Raw(Model.ApiResponse)</pre>
+        }
+        else
+        {
+            <div class="response-empty" style="color: red">No response data to display.</div>
+        }
     </div>
 </div>
