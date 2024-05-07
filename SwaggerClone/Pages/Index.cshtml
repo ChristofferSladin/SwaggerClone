@@ -6,5 +6,18 @@
 
 <div class="text-center">
     <h1 class="display-4">Swagger Clone UI by Christoffer Sladin</h1>
-    <p>TEXtblablaTEXT</p>
+
+    <h2>Fetch Data from API</h2>
+
+    <form method="post" asp-page-handler="FetchApi">
+        <label for="endpoint">API Endpoint:</label>
+        <input type="text" id="endpoint" name="Endpoint" style="width: 60%;" />
+        <button type="submit">Fetch</button>
+    </form>
+
+    <hr />
+
+    <div style="border: 1px solid black; width: 80%; height: 300px; overflow-y: scroll;">
+        <pre>@Model.ApiResponse</pre>
+    </div>
 </div>

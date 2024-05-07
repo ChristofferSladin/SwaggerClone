@@ -1,20 +1,27 @@
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
+using SwaggerCloneLibrary.Services;
 
-namespace SwaggerClone.Pages
+namespace SwaggerClone.Pages;
+
+public class IndexModel(ILogger<IndexModel> logger, HttpClient httpClient, ApiAccess apiAccess) : PageModel
 {
-    public class IndexModel : PageModel
+    private readonly ILogger<IndexModel> _logger = logger;
+    private readonly HttpClient _httpClient = httpClient;
+    private readonly ApiAccess _apiAccess = apiAccess;
+
+    [BindProperty]
+    public string Endpoint { get; set; }
+    public string ApiResponse { get; set; }
+
+    public void OnGet()
     {
-        private readonly ILogger<IndexModel> _logger;
 
-        public IndexModel(ILogger<IndexModel> logger)
-        {
-            _logger = logger;
-        }
+    }
 
-        public void OnGet()
-        {
-
-        }
+    public async Task<IActionResult> OnPostFetchApiAsync()
+    {
+        ApiResponse = await _apiAccess.CallApi(Endpoint);
+        return Page();
     }
 }
