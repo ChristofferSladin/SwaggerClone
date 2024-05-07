@@ -1,0 +1,31 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.8.34316.72
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SwaggerClone", "SwaggerClone\SwaggerClone.csproj", "{9C418F51-3AA7-4B4C-9E3A-4C0A5C36E2E9}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SwaggerCloneLibrary", "SwaggerCloneLibrary\SwaggerCloneLibrary.csproj", "{58BAD4E5-2F62-4816-BB66-82F5AE949F04}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{9C418F51-3AA7-4B4C-9E3A-4C0A5C36E2E9}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{9C418F51-3AA7-4B4C-9E3A-4C0A5C36E2E9}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{9C418F51-3AA7-4B4C-9E3A-4C0A5C36E2E9}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{9C418F51-3AA7-4B4C-9E3A-4C0A5C36E2E9}.Release|Any CPU.Build.0 = Release|Any CPU
+		{58BAD4E5-2F62-4816-BB66-82F5AE949F04}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{58BAD4E5-2F62-4816-BB66-82F5AE949F04}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{58BAD4E5-2F62-4816-BB66-82F5AE949F04}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{58BAD4E5-2F62-4816-BB66-82F5AE949F04}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {01C5E228-6BFF-4AA1-A1B7-A6FFB03328FF}
+	EndGlobalSection
+EndGlobal
