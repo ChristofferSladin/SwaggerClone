@@ -7,31 +7,30 @@
 <div class="main-container text-center">
     <h1 class="display-4 title">Swagger Clone</h1>
 
-    <form method="post" asp-page-handler="FetchApi">
+    <form method="post" asp-page-handler="FetchApi" novalidate>
         <div class="api-field-container">
             <div class="input-container">
-                <input required="" id="input" name="Endpoint" type="text">
+                <input required id="input" name="Endpoint" type="text">
                 <label class="label" for="input">Endpoint</label>
                 <div class="underline"></div>
                 <div class="sideline"></div>
                 <div class="upperline"></div>
                 <div class="line"></div>
             </div>
-            <button class="fetch-btn" type="submit">Fetch</button>
+            <button class="fetch-btn" type="submit" asp-page-handler="FetchApi">Fetch</button>
+
         </div>
 
+        <hr class="divider" />
 
-
-
-
-        <div></div>
-
-        <label for="formatToJson">JSON Format</label>
-        <input type="checkbox" id="formatJson" name="FormatJson" checked="@Model.FormatJson" />
-
+        <div class="options">
+            <label for="formatJson">
+                JSON Format
+                <input type="checkbox" id="formatJson" class="input" name="FormatJson" checked="@Model.FormatJson">
+                <span class="custom-checkbox"></span>
+            </label>
+        </div>
     </form>
-
-    <hr class="divider" />
 
     <div class="response-container">
         @if (!string.IsNullOrEmpty(Model.ApiResponse))
@@ -42,6 +41,12 @@
         {
             <div class="response-empty" style="color: red">No response data to display.</div>
         }
+    </div>
+
+    <div class="options">
+        <form method="post" asp-page-handler="Reset">
+            <button class="fetch-btn" type="submit">Reset</button>
+        </form>
     </div>
 </div>
 

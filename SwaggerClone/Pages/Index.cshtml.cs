@@ -16,7 +16,6 @@ public class IndexModel(ILogger<IndexModel> logger, IApiAccess apiAccess) : Page
 
     public string ApiResponse { get; set; }
 
-
     public void OnGet()
     {
 
@@ -25,6 +24,12 @@ public class IndexModel(ILogger<IndexModel> logger, IApiAccess apiAccess) : Page
     public async Task<IActionResult> OnPostFetchApiAsync()
     {
         ApiResponse = await _apiAccess.CallApi(Endpoint, FormatJson);
+        return Page();
+    }
+
+    public IActionResult OnPostReset()
+    {
+        ApiResponse = string.Empty;
         return Page();
     }
 }
