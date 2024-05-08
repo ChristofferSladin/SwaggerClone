@@ -17,7 +17,7 @@
                 <div class="upperline"></div>
                 <div class="line"></div>
             </div>
-            <button class="fetch-btn" type="submit" asp-page-handler="FetchApi">Fetch</button>
+            <button class="fetch-btn" type="submit" asp-page-handler="Get">Fetch</button>
 
         </div>
 
@@ -39,7 +39,7 @@
         }
         else
         {
-            <div class="response-empty" style="color: red">No response data to display.</div>
+            <div class="response-empty">No response data to display.</div>
         }
     </div>
 
@@ -48,5 +48,28 @@
             <button class="fetch-btn" type="submit">Reset</button>
         </form>
     </div>
+
+    <hr class="divider" />
+
+
+    <h2>Extended API Interaction</h2>
+
+    <form method="post" novalidate>
+        <div class="api-field-container">
+            <div class="input-container">
+                <input required id="endpointInput" name="Endpoint" type="text" value="@Model.Endpoint">
+                <label class="label" for="endpointInput">Endpoint</label>
+            </div>
+
+            <!-- Additional Data for POST/PUT Requests -->
+            <textarea class="response-container" id="jsonPayload" name="JsonPayload">@Model.JsonPayload</textarea>
+            <label for="jsonPayload">Request Data (JSON)</label>
+
+            <!-- Action Buttons for Different HTTP Methods -->
+            <button class="fetch-btn" type="submit" asp-page-handler="Post">POST</button>
+            <button class="fetch-btn" type="submit" asp-page-handler="Put">PUT</button>
+            <button class="fetch-btn" type="submit" asp-page-handler="Delete">DELETE</button>
+        </div>
+    </form>
 </div>
 

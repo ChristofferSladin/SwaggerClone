@@ -8,6 +8,9 @@ namespace SwaggerCloneLibrary.Interfaces
 {
     public interface IApiAccess
     {
-        Task<string> CallApi(string url, bool formatJson);
+        Task<string> Get(string url, bool formatJson);
+        Task<string> Delete(string endpoint);
+        Task<string> Post(string endpoint, string jsonPayload);
+        Task<string> Put(string endpoint, string jsonPayload);
     }
 }

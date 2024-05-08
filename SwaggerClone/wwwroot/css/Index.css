@@ -73,3 +73,7 @@
     padding: 10px;
     font-family: monospace;
 }
+
+.response-empty {
+    color: red;
+}
