@@ -1,4 +1,5 @@
 ﻿using SwaggerCloneLibrary.Interfaces;
+using SwaggerCloneLibrary.Utility;
 using System.Net;
 using System.Text.Encodings.Web;
 using System.Text.Json;
@@ -9,17 +10,13 @@ public class ApiAccess(HttpClient httpClient) : IApiAccess
 {
     private readonly HttpClient _httpClient = httpClient;
 
-
-
-    // THE BOOL IS OT WORKING AS EXPECTED
-
     public async Task<string> CallApi(string url, bool formatJson)
     {
+        if (Validation.IsNotValidUrl(url))
+            return "Error: URL not valid";
 
-        if (string.IsNullOrEmpty(url) || !Uri.IsWellFormedUriString(url, UriKind.Absolute))
-        {
-            return "Error: Invalid or missing URL.";
-        }
+        if (Validation.IsNotWellFormedUrl(url))
+            return "Error: URL not formed properly";
 
         var response = await _httpClient.GetAsync(url);
 
