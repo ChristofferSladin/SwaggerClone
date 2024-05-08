@@ -1,0 +1,31 @@
+﻿.fetch-btn {
+    position: relative;
+    color: #ff00ff;
+    align-items: center;
+    background-color: transparent;
+    color: #00ff00;
+    cursor: pointer;
+    display: flex;
+    font-size: 1rem;
+    text-decoration: none;
+    outline: 0;
+    border: none;
+    margin-left: 10px;
+}
+
+    .fetch-btn:after {
+        position: absolute;
+        margin-top: -0.5px;
+        left: 100%;
+        content: "";
+        display: inline-block;
+        height: 1px;
+        margin-right: 5px;
+        transition: all .42s cubic-bezier(.25,.8,.25,1);
+        width: 0;
+    }
+
+    .fetch-btn:hover:after {
+        background-color: #00ff00;
+        width: 2rem;
+    }

@@ -8,13 +8,25 @@
     <h1 class="display-4 title">Swagger Clone</h1>
 
     <form method="post" asp-page-handler="FetchApi">
-        <label for="endpoint">API Endpoint:</label>
-        <input type="text" id="endpoint" name="Endpoint" />
-        <button type="submit">Fetch</button>
+        <div class="api-field-container">
+            <div class="input-container">
+                <input required="" id="input" name="Endpoint" type="text">
+                <label class="label" for="input">Endpoint</label>
+                <div class="underline"></div>
+                <div class="sideline"></div>
+                <div class="upperline"></div>
+                <div class="line"></div>
+            </div>
+            <button class="fetch-btn" type="submit">Fetch</button>
+        </div>
+
+
+
+
 
         <div></div>
 
-        <label for="formatToJson">Format as JSON:</label>
+        <label for="formatToJson">JSON Format</label>
         <input type="checkbox" id="formatJson" name="FormatJson" checked="@Model.FormatJson" />
 
     </form>
@@ -32,3 +44,4 @@
         }
     </div>
 </div>
+

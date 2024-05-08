@@ -1,0 +1,97 @@
+﻿
+.input-container {
+    position: relative;
+    margin-left: 10px;
+    margin-right: 10px;
+    width: 300px;
+}
+
+    .input-container input[type="text"] {
+        border: none;
+        color: #fff;
+        border-bottom: 2px solid #00ff00;
+        outline: none;
+        width: 100%;
+        background-color: transparent;
+    }
+
+.label {
+    transition: all 0.1s ease;
+    position: absolute;
+    top: 0;
+    left: 0;
+    pointer-events: none;
+}
+
+.input-container input[type="text"]:focus ~ .label,
+.input-container input[type="text"]:valid ~ .label {
+    top: -20px;
+    transition: 0.3s;
+    color: #00ff00;
+}
+
+.input-container .underline {
+    position: absolute;
+    bottom: 4px;
+    left: -10px;
+    height: 2px;
+    width: 110%;
+    background-color: #00ff00;
+    transform: scaleX(0);
+}
+
+.input-container .sideline {
+    position: relative;
+    bottom: 15px;
+    right: 30px;
+    height: 2px;
+    width: 18%;
+    background-color: #00ff00;
+    transform: scaleX(0);
+    rotate: 90deg;
+}
+
+.input-container .upperline {
+    position: absolute;
+    bottom: 30px;
+    left: -10px;
+    height: 2px;
+    width: 110%;
+    background-color: #00ff00;
+    transform: scaleX(0);
+}
+
+.input-container .line {
+    position: relative;
+    bottom: 17px;
+    left: 288px;
+    height: 2px;
+    width: 18%;
+    background-color: #00ff00;
+    transform: scaleX(0);
+    rotate: 90deg;
+}
+
+.input-container input[type="text"]:focus ~ .underline,
+.input-container input[type="text"]:valid ~ .underline {
+    transform: scaleX(1);
+    transition: 0.1s;
+}
+
+.input-container input[type="text"]:focus ~ .sideline,
+.input-container input[type="text"]:valid ~ .sideline {
+    transform: scaleX(0.5);
+    transition: 0.3s;
+}
+
+.input-container input[type="text"]:focus ~ .upperline,
+.input-container input[type="text"]:valid ~ .upperline {
+    transform: scaleX(1);
+    transition: 0.7s;
+}
+
+.input-container input[type="text"]:focus ~ .line,
+.input-container input[type="text"]:valid ~ .line {
+    transform: scaleX(0.5);
+    transition: 0.3s;
+}

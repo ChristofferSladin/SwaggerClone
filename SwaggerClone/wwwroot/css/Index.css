@@ -5,18 +5,23 @@
 }
 
 .title {
-    margin-top: 20px;
-    color: #333;
+    margin-bottom: 20px;
 }
 
 .subtitle {
     margin-top: 15px;
     font-weight: bold;
-    color: #666;
 }
 
 .api-form {
     margin-top: 20px;
+}
+
+.api-field-container{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin: auto;
 }
 
 .api-label {
@@ -34,10 +39,8 @@
 
 .api-submit {
     padding: 5px 15px;
-    background: linear-gradient(135deg, #0c0c0c, #000);
-    color: #00ff00;
     font-family: "Courier New", Courier, monospace;
-    border: none;
+    border: #00ff00;
     border-radius: 4px;
     cursor: pointer;
 }
@@ -48,11 +51,11 @@
 
 .divider {
     margin-top: 30px;
-    border: 1px solid #ccc;
+    border: 1px solid #00ff00;
 }
 
 .response-container {
-    border: 1px solid black;
+    border: 1px solid #00ff00;
     width: 90%;
     height: 500px;
     overflow-y: scroll;
@@ -61,9 +64,6 @@
 }
 
 .response-display {
-    background: linear-gradient(135deg, #0c0c0c, #000);
-    color: #00ff00;
-    font-family: "Courier New", Courier, monospace;
     text-align: center;
     margin: 0;
     padding: 0;

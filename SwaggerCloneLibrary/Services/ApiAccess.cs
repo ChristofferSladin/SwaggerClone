@@ -20,26 +20,17 @@ public class ApiAccess(HttpClient httpClient) : IApiAccess
 
         var response = await _httpClient.GetAsync(url);
 
-        try
+        if (response.IsSuccessStatusCode)
         {
-            if (response.IsSuccessStatusCode)
+            var responseBody = await response.Content.ReadAsStringAsync();
+
+            if (formatJson)
             {
-                var responseBody = await response.Content.ReadAsStringAsync();
-
-                if (formatJson)
-                {
-                    var jsonElement = JsonSerializer.Deserialize<JsonElement>(responseBody);
-                    return JsonSerializer.Serialize(jsonElement, new JsonSerializerOptions { WriteIndented = true });
-                }
-
-                return responseBody;
+                var jsonElement = JsonSerializer.Deserialize<JsonElement>(responseBody);
+                return JsonSerializer.Serialize(jsonElement, new JsonSerializerOptions { WriteIndented = true });
             }
+            return responseBody;
         }
-        catch (HttpRequestException ex)
-        {
-            return $"Error: {ex.Message}";
-        }
-
-        return $"Error: {response.RequestMessage} {response.StatusCode}";
+        else return $"Error: {response.RequestMessage} Statuscode: {response.StatusCode}";
     }
 }

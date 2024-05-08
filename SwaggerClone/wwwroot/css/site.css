@@ -1,5 +1,12 @@
-html {
-  font-size: 14px;
+html, body {
+    background: linear-gradient(135deg, #0c0c0c, #000);
+    color: #00ff00;
+    font-family: "Courier New", Courier, monospace;
+    height: 100%;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    flex-direction: column;
 }
 
 @media (min-width: 768px) {
@@ -8,15 +15,25 @@ html {
   }
 }
 
-.btn:focus, .btn:active:focus, .btn-link.nav-link:focus, .form-control:focus, .form-check-input:focus {
-  box-shadow: 0 0 0 0.1rem white, 0 0 0 0.25rem #258cfb;
+::-webkit-scrollbar {
+    width: 12px;
+    height: 12px;
 }
 
-html {
-  position: relative;
-  min-height: 100%;
+::-webkit-scrollbar-track {
+    background: linear-gradient(135deg, #0c0c0c, #000);
+    border-radius: 10px;
 }
 
-body {
-    margin-bottom: 60px;
+::-webkit-scrollbar-thumb {
+    background: #00ff00;
+    border-radius: 0;
+}
+
+    ::-webkit-scrollbar-thumb:hover {
+        background: #00cc00;
+    }
+
+::-webkit-scrollbar-corner {
+    background: #0c0c0c;
 }
