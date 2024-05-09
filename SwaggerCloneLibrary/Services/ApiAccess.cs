@@ -11,7 +11,7 @@ public class ApiAccess(HttpClient httpClient) : IApiAccess
 {
     private readonly HttpClient _httpClient = httpClient;
 
-    public async Task<string> Get(string url, bool formatJson)
+    public async Task<string> Get(string url)
     {
         if (Validation.IsNotValidUrl(url))
             return "Error: URL not valid";
@@ -25,12 +25,8 @@ public class ApiAccess(HttpClient httpClient) : IApiAccess
         {
             var responseBody = await response.Content.ReadAsStringAsync();
 
-            if (formatJson)
-            {
-                var jsonElement = JsonSerializer.Deserialize<JsonElement>(responseBody);
-                return JsonSerializer.Serialize(jsonElement, new JsonSerializerOptions { WriteIndented = true });
-            }
-            return responseBody;
+            var jsonElement = JsonSerializer.Deserialize<JsonElement>(responseBody);
+            return JsonSerializer.Serialize(jsonElement, new JsonSerializerOptions { WriteIndented = true });
         }
         else return $"Error: {response.RequestMessage} Statuscode: {response.StatusCode}";
     }
@@ -64,7 +60,7 @@ public class ApiAccess(HttpClient httpClient) : IApiAccess
     }
 
     // DELETE Method
-    public async Task<string> Delete(string url)
+    public async Task<string> Delete(string url, int objectId)
     {
         if (Validation.IsNotValidUrl(url))
             return "Error: URL not valid";
@@ -72,7 +68,80 @@ public class ApiAccess(HttpClient httpClient) : IApiAccess
         if (Validation.IsNotWellFormedUrl(url))
             return "Error: URL not formed properly";
 
-        var response = await _httpClient.DeleteAsync(url);
-        return await response.Content.ReadAsStringAsync();
+        if (objectId <= 0)
+            return $"Error: The object does not exist";
+
+        try
+        {
+            string fullUrl = $"{url.TrimEnd('/')}/{objectId}";
+
+            var response = await _httpClient.DeleteAsync(fullUrl);
+
+            var json = await response.Content.ReadAsStringAsync();
+
+            return $"Object with id: {objectId}\nWas successfully deleted";
+        }
+        catch (Exception ex)
+        {
+            return $"Error: {ex.Message}";
+        }
+    }
+
+    public async Task<string> GetJsonTemplate(string url)
+    {
+        try
+        {
+            if (Validation.IsNotValidUrl(url))
+                return "Error: URL not valid";
+
+            if (Validation.IsNotWellFormedUrl(url))
+                return "Error: URL not formed properly";
+
+            var response = await _httpClient.GetStringAsync(url);
+            var jsonDocument = JsonDocument.Parse(response);
+            var rootElement = jsonDocument.RootElement;
+
+            var jsonObject = rootElement.ValueKind == JsonValueKind.Array ? rootElement[0] : rootElement;
+
+            var modifiedJson = ReplaceWithDefaults(jsonObject);
+
+            return JsonSerializer.Serialize(modifiedJson, new JsonSerializerOptions { WriteIndented = true });
+        }
+        catch (Exception ex)
+        {
+            return $"Error: {ex.Message}";
+        }
+    }
+
+    private static Dictionary<string, object> ReplaceWithDefaults(JsonElement element)
+    {
+        var result = new Dictionary<string, object>();
+
+        foreach (var property in element.EnumerateObject())
+        {
+            switch (property.Value.ValueKind)
+            {
+                case JsonValueKind.String:
+                    result[property.Name] = string.Empty;
+                    break;
+                case JsonValueKind.Number:
+                    result[property.Name] = 0;
+                    break;
+                case JsonValueKind.True:
+                case JsonValueKind.False:
+                    result[property.Name] = false;
+                    break;
+                case JsonValueKind.Array:
+                    result[property.Name] = new List<object>();
+                    break;
+                case JsonValueKind.Object:
+                    result[property.Name] = ReplaceWithDefaults(property.Value);
+                    break;
+                default:
+                    result[property.Name] = null;
+                    break;
+            }
+        }
+        return result;
     }
 }

@@ -7,28 +7,32 @@
 <div class="main-container text-center">
     <h1 class="display-4 title">Swagger Clone</h1>
 
+    <hr class="divider" />
+
     <form method="post" asp-page-handler="FetchApi" novalidate>
-        <div class="api-field-container">
-            <div class="input-container">
-                <input required id="input" name="Endpoint" type="text">
-                <label class="label" for="input">Endpoint</label>
-                <div class="underline"></div>
-                <div class="sideline"></div>
-                <div class="upperline"></div>
-                <div class="line"></div>
+        <div class="extended-actions-container">
+            <div class="api-field-container">
+                <div class="d-block">
+                    <div class="d-flex">
+                        <div class="input-container">
+                            <input required id="input" name="Endpoint" type="text">
+                            <label class="label" for="input">Endpoint</label>
+                            <div class="underline"></div>
+                            <div class="sideline"></div>
+                            <div class="upperline"></div>
+                            <div class="line"></div>
+                        </div>
+                        <button class="fetch-btn" type="submit" asp-page-handler="Get">Get</button>
+                    </div>
+
+                    <div class="delete-container">
+                        <div class="delete-holder">
+                            <input required type="number" id="objectId" class="objectId-input" name="ObjectId" value="@Model.ObjectId">
+                            <button class="fetch-btn" type="submit" asp-page-handler="Delete">Delete Id</button>
+                        </div>
+                    </div>
+                </div> 
             </div>
-            <button class="fetch-btn" type="submit" asp-page-handler="Get">Fetch</button>
-
-        </div>
-
-        <hr class="divider" />
-
-        <div class="options">
-            <label for="formatJson">
-                JSON Format
-                <input type="checkbox" id="formatJson" class="input" name="FormatJson" checked="@Model.FormatJson">
-                <span class="custom-checkbox"></span>
-            </label>
         </div>
     </form>
 
@@ -43,7 +47,7 @@
         }
     </div>
 
-    <div class="options">
+    <div class="d-flex justify-content-start" style="margin-left: 2%;">
         <form method="post" asp-page-handler="Reset">
             <button class="fetch-btn" type="submit">Reset</button>
         </form>
@@ -52,23 +56,23 @@
     <hr class="divider" />
 
 
-    <h2>Extended API Interaction</h2>
-
     <form method="post" novalidate>
-        <div class="api-field-container">
+        <div class="extended-actions-container">
             <div class="input-container">
-                <input required id="endpointInput" name="Endpoint" type="text" value="@Model.Endpoint">
+                <input required type="text" id="apiEndpoint" name="Endpoint">
                 <label class="label" for="endpointInput">Endpoint</label>
+                <div class="underline"></div>
+                <div class="sideline"></div>
+                <div class="upperline"></div>
+                <div class="line"></div>
             </div>
 
-            <!-- Additional Data for POST/PUT Requests -->
-            <textarea class="response-container" id="jsonPayload" name="JsonPayload">@Model.JsonPayload</textarea>
-            <label for="jsonPayload">Request Data (JSON)</label>
+            <textarea id="jsonPayload" name="JsonPayload">@Model.JsonPayload</textarea>
 
-            <!-- Action Buttons for Different HTTP Methods -->
+            <button type="submit" class="fetch-btn" asp-page-handler="FetchJsonTemplate">Get JSON Structure</button>
             <button class="fetch-btn" type="submit" asp-page-handler="Post">POST</button>
             <button class="fetch-btn" type="submit" asp-page-handler="Put">PUT</button>
-            <button class="fetch-btn" type="submit" asp-page-handler="Delete">DELETE</button>
+
         </div>
     </form>
 </div>

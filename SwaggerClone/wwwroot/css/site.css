@@ -10,10 +10,22 @@ html, body {
 }
 
 @media (min-width: 768px) {
-  html {
-    font-size: 16px;
-  }
+    html {
+        font-size: 16px;
+    }
 }
+
+textarea {
+    background: linear-gradient(135deg, #0c0c0c, #000);
+    color: #00ff00;
+    border: 1px solid #00ff00;
+    width: 100%;
+    resize: none;
+}
+
+    textarea:focus {
+        border: 2px solid #00ff00;
+    }
 
 .options {
     display: flex;
