@@ -29,3 +29,10 @@
         background-color: #00ff00;
         width: 2rem;
     }
+
+.reset-btn-container{
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
+    margin-right: 40px;
+}

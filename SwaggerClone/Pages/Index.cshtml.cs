@@ -18,15 +18,48 @@ public class IndexModel(ILogger<IndexModel> logger, IApiAccess apiAccess) : Page
     [BindProperty] public string JsonPayload { get; set; }
     [BindProperty] public int ObjectId { get; set; }
     [BindProperty] public string ApiResponse { get; set; }
+    [BindProperty] public string RequestType { get; set; }
 
     public void OnGet()
     {
 
     }
+    public async Task<IActionResult> OnPostExecuteAsync()
+    {
+        if (RequestType == "GET")
+            ApiResponse = await _apiAccess.GetOne(Endpoint, ObjectId);
+
+        else if (RequestType == "DELETE")
+            ApiResponse = await _apiAccess.DeleteOne(Endpoint, ObjectId);
+
+        return Page();
+    }
 
     public async Task<IActionResult> OnPostGetAsync()
     {
         ApiResponse = await _apiAccess.Get(Endpoint);
+        return Page();
+    }
+
+    public async Task<IActionResult> OnPostDeleteAsync()
+    {
+        ApiResponse = await _apiAccess.DeleteOne(Endpoint, ObjectId);
+        return Page();
+    }
+
+    public async Task<IActionResult> OnPostFetchJsonTemplateAsync()
+    {
+        JsonPayload = await _apiAccess.GetJsonTemplate(Endpoint);
+        return Page();
+    }
+
+    public IActionResult OnPostReset()
+    {
+        ApiResponse = string.Empty;
+        ObjectId = 0;
+        JsonPayload = string.Empty;
+        RequestType = "GET";
+        Endpoint = string.Empty;
         return Page();
     }
 
@@ -41,53 +74,4 @@ public class IndexModel(ILogger<IndexModel> logger, IApiAccess apiAccess) : Page
     //    ApiResponse = await _apiAccess.Put(Endpoint, JsonPayload);
     //    return Page();
     //}
-
-    public async Task<IActionResult> OnPostDeleteAsync()
-    {
-        ApiResponse = await _apiAccess.Delete(Endpoint, ObjectId);
-        return Page();
-    }
-
-    public async Task<IActionResult> OnPostFetchJsonTemplateAsync()
-    {
-        JsonPayload = await _apiAccess.GetJsonTemplate(Endpoint);
-        return Page();
-    }
-
-    public IActionResult OnPostReset()
-    {
-        ApiResponse = string.Empty;
-        return Page();
-    }
-
-
-
-    [BindProperty] public string RequestType { get; set; }
-
-    public async Task<IActionResult> OnPostExecuteAsync()
-    {
-
-
-        // MOVE ObjectID logic into APIACCESS, make get take 2 parameters like delete, check if ObjectId == 0
-
-
-        string responseContent = null;
-        var url = Endpoint;
-        if (RequestType == "GET")
-        {
-            if(ObjectId > 0)
-            {
-                url = $"{Endpoint}/{ObjectId}";
-            }
-            responseContent = await _apiAccess.Get(url);
-        }
-        else if (RequestType == "DELETE")
-        {
-            responseContent = await _apiAccess.Delete(Endpoint, ObjectId);
-        }
-
-        ApiResponse = responseContent;
-
-        return Page();
-    }
 }

@@ -5,7 +5,9 @@
 }
 
 .title {
-    margin-bottom: 20px;
+    display: flex;
+    justify-content: flex-start;
+    align-items: center;
 }
 
 .subtitle {
@@ -69,17 +71,16 @@
 }
 
 .divider {
-    margin-top: 10px;
+    margin: 10px;
     border: 1px solid #00ff00;
 }
 
 .response-container {
     border: 1px solid #00ff00;
     width: 90%;
-    height: 250px;
+    height: 300px;
     overflow-y: scroll;
     margin: auto;
-    margin-top: 20px;
 }
 
 .response-display {

@@ -22,12 +22,27 @@ public class ApiAccess(HttpClient httpClient) : IApiAccess
         var response = await _httpClient.GetAsync(url);
 
         if (response.IsSuccessStatusCode)
-        {
-            var responseBody = await response.Content.ReadAsStringAsync();
+            return Helper.FormatJson(await response.Content.ReadAsStringAsync());
 
-            var jsonElement = JsonSerializer.Deserialize<JsonElement>(responseBody);
-            return JsonSerializer.Serialize(jsonElement, new JsonSerializerOptions { WriteIndented = true });
-        }
+        else return $"Error: {response.RequestMessage} Statuscode: {response.StatusCode}";
+    }
+
+    public async Task<string> GetOne(string url, int objectId)
+    {
+        if (Validation.IsNotValidUrl(url))
+            return "Error: URL not valid";
+
+        if (Validation.IsNotWellFormedUrl(url))
+            return "Error: URL not formed properly";
+
+        if (objectId > 0)
+            url = $"{url}/{objectId}";
+
+        var response = await _httpClient.GetAsync(url);
+
+        if (response.IsSuccessStatusCode)
+            return Helper.FormatJson(await response.Content.ReadAsStringAsync());
+
         else return $"Error: {response.RequestMessage} Statuscode: {response.StatusCode}";
     }
 
@@ -59,8 +74,7 @@ public class ApiAccess(HttpClient httpClient) : IApiAccess
         return await response.Content.ReadAsStringAsync();
     }
 
-    // DELETE Method
-    public async Task<string> Delete(string url, int objectId)
+    public async Task<string> DeleteOne(string url, int objectId)
     {
         if (Validation.IsNotValidUrl(url))
             return "Error: URL not valid";
@@ -75,11 +89,14 @@ public class ApiAccess(HttpClient httpClient) : IApiAccess
         {
             string fullUrl = $"{url.TrimEnd('/')}/{objectId}";
 
+            var deletedObject = await GetOne(url, objectId);
             var response = await _httpClient.DeleteAsync(fullUrl);
 
-            var json = await response.Content.ReadAsStringAsync();
+            if (response.IsSuccessStatusCode)
+                return $"Object successfully deleted:\n\n{deletedObject}";
 
-            return $"Object with id: {objectId}\nWas successfully deleted";
+            else
+                return $"Error: {response.StatusCode} - {response.ReasonPhrase}";
         }
         catch (Exception ex)
         {

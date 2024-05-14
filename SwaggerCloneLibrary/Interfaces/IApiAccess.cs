@@ -10,7 +10,8 @@ namespace SwaggerCloneLibrary.Interfaces
     public interface IApiAccess
     {
         Task<string> Get(string url);
-        Task<string> Delete(string endpoint, int objectId);
+        Task<string> GetOne(string url, int objectId);
+        Task<string> DeleteOne(string endpoint, int objectId);
         Task<string> Post(string endpoint, string jsonPayload);
         Task<string> Put(string endpoint, string jsonPayload);
         Task<string> GetJsonTemplate(string url);

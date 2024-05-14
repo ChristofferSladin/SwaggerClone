@@ -5,11 +5,18 @@
 }
 
 <div class="main-container text-center">
-    <h1 class="display-4 title">Swagger Clone</h1>
+    <div class="d-flex justify-content-between">
+        <div class="title">
+            <h1 class="display-4 title">Swagger Clone</h1>
+        </div>
+        <div class="reset-btn-container">
+            <form method="post" asp-page-handler="Reset">
+                <button class="fetch-btn" type="submit">Reset</button>
+            </form>
+        </div>
+    </div>
 
     <hr class="divider" />
-
-
 
     <div class="extended-actions-container">
         <form method="post" asp-page-handler="Execute">
@@ -24,7 +31,6 @@
                         <div class="line"></div>
                     </div>
                 </div>
-
                 <div class="form-group">
                     <div class="custom-select">
                         <select id="requestType" name="RequestType" required>
@@ -33,9 +39,6 @@
                         </select>
                     </div>
                 </div>
-
-
-
                 <div class="delete-container">
 
                     <div class="delete-holder">
@@ -44,10 +47,7 @@
                         <input required type="number" id="objectId" class="objectId-input" name="ObjectId" value="@Model.ObjectId">
                     </div>
                 </div>
-
                 <input type="hidden" name="JsonPayload" value="@Model.JsonPayload" />
-
-
                 <button class="fetch-btn" type="submit">Execute</button>
             </div>
         </form>
@@ -64,12 +64,7 @@
         }
     </div>
 
-    <form method="post" asp-page-handler="Reset">
-        <button class="fetch-btn" type="submit">Reset</button>
-    </form>
-
     <hr class="divider" />
-
 
     <form method="post" novalidate>
         <div class="extended-actions-container">
@@ -81,17 +76,11 @@
                 <div class="upperline"></div>
                 <div class="line"></div>
             </div>
-
-
             <textarea id="jsonPayload" name="JsonPayload">@Model.JsonPayload</textarea>
-
             <input type="hidden" name="ApiResponse" value="@Model.ApiResponse" />
-
-
             <button type="submit" class="fetch-btn" asp-page-handler="FetchJsonTemplate">Get JSON Structure</button>
             <button class="fetch-btn" type="submit" asp-page-handler="Post">POST</button>
             <button class="fetch-btn" type="submit" asp-page-handler="Put">PUT</button>
-
         </div>
     </form>
 </div>
