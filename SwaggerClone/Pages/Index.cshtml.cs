@@ -5,6 +5,7 @@ using SwaggerCloneLibrary.Services;
 using System.Net.Http;
 using System.Text;
 using System.Text.Json;
+using static System.Runtime.InteropServices.JavaScript.JSType;
 
 namespace SwaggerClone.Pages;
 
@@ -29,17 +30,17 @@ public class IndexModel(ILogger<IndexModel> logger, IApiAccess apiAccess) : Page
         return Page();
     }
 
-    public async Task<IActionResult> OnPostPostAsync()
-    {
-        ApiResponse = await _apiAccess.Post(Endpoint, JsonPayload);
-        return Page();
-    }
+    //public async Task<IActionResult> OnPostPostAsync()
+    //{
+    //    ApiResponse = await _apiAccess.Post(Endpoint, JsonPayload);
+    //    return Page();
+    //}
 
-    public async Task<IActionResult> OnPostPutAsync()
-    {
-        ApiResponse = await _apiAccess.Put(Endpoint, JsonPayload);
-        return Page();
-    }
+    //public async Task<IActionResult> OnPostPutAsync()
+    //{
+    //    ApiResponse = await _apiAccess.Put(Endpoint, JsonPayload);
+    //    return Page();
+    //}
 
     public async Task<IActionResult> OnPostDeleteAsync()
     {
@@ -56,6 +57,37 @@ public class IndexModel(ILogger<IndexModel> logger, IApiAccess apiAccess) : Page
     public IActionResult OnPostReset()
     {
         ApiResponse = string.Empty;
+        return Page();
+    }
+
+
+
+    [BindProperty] public string RequestType { get; set; }
+
+    public async Task<IActionResult> OnPostExecuteAsync()
+    {
+
+
+        // MOVE ObjectID logic into APIACCESS, make get take 2 parameters like delete, check if ObjectId == 0
+
+
+        string responseContent = null;
+        var url = Endpoint;
+        if (RequestType == "GET")
+        {
+            if(ObjectId > 0)
+            {
+                url = $"{Endpoint}/{ObjectId}";
+            }
+            responseContent = await _apiAccess.Get(url);
+        }
+        else if (RequestType == "DELETE")
+        {
+            responseContent = await _apiAccess.Delete(Endpoint, ObjectId);
+        }
+
+        ApiResponse = responseContent;
+
         return Page();
     }
 }

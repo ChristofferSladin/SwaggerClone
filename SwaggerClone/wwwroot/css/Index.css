@@ -17,22 +17,22 @@
     margin-top: 20px;
 }
 
-.api-field-container{
-    
+.api-field-container {
     display: flex;
     justify-content: flex-start;
     align-items: center;
     margin: auto;
 }
 
-.delete-container{
+.delete-container {
     display: flex;
     justify-content: space-between;
 }
 
-.delete-holder{
+.delete-holder {
     display: flex;
     justify-content: flex-end;
+    align-items: center;
     margin-left: 10px;
 }
 
@@ -61,11 +61,10 @@
         background-color: #0056b3;
     }
 
-.objectId-input {
-    width: 100px;
-    border: 1px solid #00ff00;
+#requestType {
     background: linear-gradient(135deg, #0c0c0c, #000);
     color: #00ff00;
+    border: 2px solid #00ff00;
     outline: none;
 }
 
@@ -103,6 +102,7 @@
     margin-top: 20px;
 }
 
-#jsonPayload{
+#jsonPayload {
     height: 250px;
+    outline: none;
 }

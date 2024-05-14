@@ -9,32 +9,49 @@
 
     <hr class="divider" />
 
-    <form method="post" asp-page-handler="FetchApi" novalidate>
-        <div class="extended-actions-container">
-            <div class="api-field-container">
-                <div class="d-block">
-                    <div class="d-flex">
-                        <div class="input-container">
-                            <input required id="input" name="Endpoint" type="text">
-                            <label class="label" for="input">Endpoint</label>
-                            <div class="underline"></div>
-                            <div class="sideline"></div>
-                            <div class="upperline"></div>
-                            <div class="line"></div>
-                        </div>
-                        <button class="fetch-btn" type="submit" asp-page-handler="Get">Get</button>
-                    </div>
 
-                    <div class="delete-container">
-                        <div class="delete-holder">
-                            <input required type="number" id="objectId" class="objectId-input" name="ObjectId" value="@Model.ObjectId">
-                            <button class="fetch-btn" type="submit" asp-page-handler="Delete">Delete Id</button>
-                        </div>
+
+    <div class="extended-actions-container">
+        <form method="post" asp-page-handler="Execute">
+            <div class="d-flex justify-content-around">
+                <div class="form-group">
+                    <div class="input-container">
+                        <input required id="input" name="Endpoint" type="text">
+                        <label class="label" for="input">Endpoint</label>
+                        <div class="underline"></div>
+                        <div class="sideline"></div>
+                        <div class="upperline"></div>
+                        <div class="line"></div>
                     </div>
-                </div> 
+                </div>
+
+                <div class="form-group">
+                    <div class="custom-select">
+                        <select id="requestType" name="RequestType" required>
+                            <option value="GET">GET</option>
+                            <option value="DELETE">DELETE</option>
+                        </select>
+                    </div>
+                </div>
+
+
+
+                <div class="delete-container">
+
+                    <div class="delete-holder">
+                        <div>ID:</div>
+
+                        <input required type="number" id="objectId" class="objectId-input" name="ObjectId" value="@Model.ObjectId">
+                    </div>
+                </div>
+
+                <input type="hidden" name="JsonPayload" value="@Model.JsonPayload" />
+
+
+                <button class="fetch-btn" type="submit">Execute</button>
             </div>
-        </div>
-    </form>
+        </form>
+    </div>
 
     <div class="response-container">
         @if (!string.IsNullOrEmpty(Model.ApiResponse))
@@ -47,11 +64,9 @@
         }
     </div>
 
-    <div class="d-flex justify-content-start" style="margin-left: 2%;">
-        <form method="post" asp-page-handler="Reset">
-            <button class="fetch-btn" type="submit">Reset</button>
-        </form>
-    </div>
+    <form method="post" asp-page-handler="Reset">
+        <button class="fetch-btn" type="submit">Reset</button>
+    </form>
 
     <hr class="divider" />
 
@@ -67,7 +82,11 @@
                 <div class="line"></div>
             </div>
 
+
             <textarea id="jsonPayload" name="JsonPayload">@Model.JsonPayload</textarea>
+
+            <input type="hidden" name="ApiResponse" value="@Model.ApiResponse" />
+
 
             <button type="submit" class="fetch-btn" asp-page-handler="FetchJsonTemplate">Get JSON Structure</button>
             <button class="fetch-btn" type="submit" asp-page-handler="Post">POST</button>

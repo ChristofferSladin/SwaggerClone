@@ -19,6 +19,7 @@ textarea {
     background: linear-gradient(135deg, #0c0c0c, #000);
     color: #00ff00;
     border: 1px solid #00ff00;
+    padding: 8px;
     width: 100%;
     resize: none;
 }
