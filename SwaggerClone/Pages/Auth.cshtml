@@ -1,0 +1,125 @@
+﻿@page
+@model SwaggerClone.Pages.AuthModel
+@{
+    ViewData["Title"] = "User Authentication";
+}
+
+<div class="container text-center">
+    <h1 class="display-4">User Authentication</h1>
+    <hr class="divider" />
+
+    <!-- Form for user credentials -->
+    <form method="post" asp-page-handler="Authenticate">
+        <div class="form-group">
+            <label for="email">Email:</label>
+            <input type="text" id="email" name="Email" class="form-control" required />
+        </div>
+
+        <div class="form-group">
+            <label for="password">Password:</label>
+            <input type="password" id="password" name="Password" class="form-control" required />
+        </div>
+
+        <div class="form-group">
+            <label for="password">Auth Url:</label>
+            <input type="text" id="authurl" name="AuthUrl" class="form-control" required />
+        </div>
+
+        <button type="submit" class="btn btn-primary">Get Token</button>
+    </form>
+
+
+    
+
+    <!-- Display the JWT token -->
+    @if (!string.IsNullOrEmpty(Model.Token))
+    {
+        <div class="token-display">
+            <h2>JWT Token:</h2>
+            <pre>@Model.Token</pre>
+        </div>
+    }
+    else
+    {
+        <div>
+            @Model.TESTING
+        </div>
+    }
+
+    <div class="divider"></div>    
+    <div class="divider"></div>
+    <div class="divider"></div>
+
+
+
+    <form method="post" asp-page-handler="CreateRequestToken">
+        <div class="form-group">
+            <label for="requesttokenurl">Request Token Url:</label>
+            <input type="text" id="requesttokenurl" name="RequestTokenUrl" class="form-control" required />
+        </div>
+
+        <div class="form-group">
+            <label for="apikey">Api Key:</label>
+            <input type="text" id="apikey" name="ApiKey" class="form-control" required />
+        </div>
+
+        <button type="submit" class="btn btn-primary">Create Session Id</button>
+    </form>
+
+
+
+    <!-- Display the Request token -->
+    @if (!string.IsNullOrEmpty(Model.SessionId))
+    {
+        <div class="token-display">
+            <h2>Session Id:</h2>
+            <pre>@Model.SessionId</pre>
+        </div>
+    }
+    else
+    {
+        <div>
+            @Model.TESTING
+        </div>
+    }
+
+    <div class="divider"></div>
+    <div class="divider"></div>
+    <div class="divider"></div>
+
+
+    <form method="post" asp-page-handler="GetSomething">
+        <div class="form-group">
+            <label for="shorturl">Short Url:</label>
+            <input type="text" id="shorturl" name="ShortUrl" class="form-control" required />
+        </div>
+
+        <div class="form-group">
+            <label for="apikey">Api Key:</label>
+            <input type="text" id="apikey" name="ApiKey" class="form-control" required />
+        </div>
+
+        <div class="form-group">
+            <label for="sessionid">Session Id:</label>
+            <input type="text" id="sessionid" name="SessionId" class="form-control" required />
+        </div>
+
+
+        <button type="submit" class="btn btn-primary">Get Something</button>
+    </form>
+
+
+    @if (!string.IsNullOrEmpty(Model.Something))
+    {
+        <div class="token-display">
+            <h2>Something:</h2>
+            <pre>@Model.Something</pre>
+        </div>
+    }
+    else
+    {
+        <div>
+            @Model.TESTING
+        </div>
+    }
+</div>

@@ -1,11 +1,6 @@
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using SwaggerCloneLibrary.Interfaces;
-using SwaggerCloneLibrary.Services;
-using System.Net.Http;
-using System.Text;
-using System.Text.Json;
-using static System.Runtime.InteropServices.JavaScript.JSType;
 
 namespace SwaggerClone.Pages;
 
@@ -19,31 +14,51 @@ public class IndexModel(ILogger<IndexModel> logger, IApiAccess apiAccess) : Page
     [BindProperty] public int ObjectId { get; set; }
     [BindProperty] public string ApiResponse { get; set; }
     [BindProperty] public string RequestType { get; set; }
+    [BindProperty] public bool UseAuth { get; set; }
+    [BindProperty] public string ErrorMessage { get; set; }
+
+
 
     public void OnGet()
     {
-
     }
+
     public async Task<IActionResult> OnPostExecuteAsync()
     {
-        if (RequestType == "GET")
-            ApiResponse = await _apiAccess.GetOne(Endpoint, ObjectId);
+        try
+        {
+            if (RequestType == "GET" && ObjectId > 0)
+                ApiResponse = await _apiAccess.GetOne(HttpContext, Endpoint, ObjectId);
 
-        else if (RequestType == "DELETE")
-            ApiResponse = await _apiAccess.DeleteOne(Endpoint, ObjectId);
+            else if (RequestType == "GET")
+                ApiResponse = await _apiAccess.Get(HttpContext, Endpoint);
+
+            else if (RequestType == "DELETE")
+                ApiResponse = await _apiAccess.DeleteOne(HttpContext, Endpoint, ObjectId);
+
+            ErrorMessage = null;
+        }
+        catch (UnauthorizedAccessException ex)
+        {
+            ErrorMessage = ex.Message;
+        }
+        catch (HttpRequestException ex)
+        {
+            ErrorMessage = ex.Message;
+        }
 
         return Page();
     }
 
     public async Task<IActionResult> OnPostGetAsync()
     {
-        ApiResponse = await _apiAccess.Get(Endpoint);
+        ApiResponse = await _apiAccess.Get(HttpContext, Endpoint);
         return Page();
     }
 
     public async Task<IActionResult> OnPostDeleteAsync()
     {
-        ApiResponse = await _apiAccess.DeleteOne(Endpoint, ObjectId);
+        ApiResponse = await _apiAccess.DeleteOne(HttpContext, Endpoint, ObjectId);
         return Page();
     }
 
@@ -63,9 +78,9 @@ public class IndexModel(ILogger<IndexModel> logger, IApiAccess apiAccess) : Page
         return Page();
     }
 
-    //public async Task<IActionResult> OnPostPostAsync()
+    //public async Task<IActionResult> OnPostPostAsync(string endpoint, string jsonPayload)
     //{
-    //    ApiResponse = await _apiAccess.Post(Endpoint, JsonPayload);
+    //    ApiResponse = await _apiAccess.Post(HttpContext, endpoint, jsonPayload);
     //    return Page();
     //}
 

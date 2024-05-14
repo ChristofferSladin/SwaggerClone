@@ -58,6 +58,10 @@
         {
             <pre class="response-display">@Html.Raw(Model.ApiResponse)</pre>
         }
+        else if (!string.IsNullOrEmpty(Model.ErrorMessage))
+        {
+            <div class="response-error">@Model.ErrorMessage</div>
+        }
         else
         {
             <div class="response-empty">No response data to display.</div>

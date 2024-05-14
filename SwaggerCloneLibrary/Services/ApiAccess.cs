@@ -1,33 +1,52 @@
-﻿using SwaggerCloneLibrary.Interfaces;
+﻿using Microsoft.AspNetCore.Http;
+using SwaggerCloneLibrary.Interfaces;
 using SwaggerCloneLibrary.Utility;
 using System.Net;
+using System.Net.Http;
+using System.Security.Policy;
 using System.Text;
 using System.Text.Encodings.Web;
 using System.Text.Json;
 
 namespace SwaggerCloneLibrary.Services;
 
-public class ApiAccess(HttpClient httpClient) : IApiAccess
+public class ApiAccess(HttpClient httpClient, IHttpContextAccessor httpContextAccessor) : IApiAccess
 {
     private readonly HttpClient _httpClient = httpClient;
+    private readonly IHttpContextAccessor _httpContextAccessor = httpContextAccessor;
 
-    public async Task<string> Get(string url)
+    private string GetTokenFromCookies(HttpContext httpContext)
     {
-        if (Validation.IsNotValidUrl(url))
-            return "Error: URL not valid";
-
-        if (Validation.IsNotWellFormedUrl(url))
-            return "Error: URL not formed properly";
-
-        var response = await _httpClient.GetAsync(url);
-
-        if (response.IsSuccessStatusCode)
-            return Helper.FormatJson(await response.Content.ReadAsStringAsync());
-
-        else return $"Error: {response.RequestMessage} Statuscode: {response.StatusCode}";
+        return httpContext.Request.Cookies["JWTToken"];
     }
 
-    public async Task<string> GetOne(string url, int objectId)
+    public async Task<string> Get(HttpContext httpContext, string url)
+    {
+        var request = new HttpRequestMessage(HttpMethod.Get, url);
+
+        var response = await _httpClient.SendAsync(request);
+        if (response.StatusCode == System.Net.HttpStatusCode.Unauthorized)
+        {
+            var token = GetTokenFromCookies(httpContext);
+            if (string.IsNullOrEmpty(token))
+            {
+                throw new UnauthorizedAccessException("Authorization token is required but not provided.");
+            }
+
+            // Retry with authorization
+            request.Headers.Authorization = new System.Net.Http.Headers.AuthenticationHeaderValue("Bearer", token);
+            response = await _httpClient.SendAsync(request);
+        }
+
+        if (response.IsSuccessStatusCode)
+        {
+            return await response.Content.ReadAsStringAsync();
+        }
+
+        throw new HttpRequestException($"Error getting data: {response.StatusCode}");
+    }
+
+    public async Task<string> GetOne(HttpContext httpContext, string url, int objectId)
     {
         if (Validation.IsNotValidUrl(url))
             return "Error: URL not valid";
@@ -46,22 +65,31 @@ public class ApiAccess(HttpClient httpClient) : IApiAccess
         else return $"Error: {response.RequestMessage} Statuscode: {response.StatusCode}";
     }
 
+
+
+
     // POST Method
-    public async Task<string> Post(string url, string jsonPayload)
+    public async Task<string> Post(HttpContext httpContext, string url, string jsonPayload)
     {
-        if (Validation.IsNotValidUrl(url))
-            return "Error: URL not valid";
+        var request = new HttpRequestMessage(HttpMethod.Post, url);
+        
+        request.Content = new StringContent(jsonPayload, Encoding.UTF8, "application/json");
 
-        if (Validation.IsNotWellFormedUrl(url))
-            return "Error: URL not formed properly";
+        var response = await _httpClient.SendAsync(request);
+        if (response.IsSuccessStatusCode)
+        {
+            return await response.Content.ReadAsStringAsync();
+        }
 
-        var content = new StringContent(jsonPayload, Encoding.UTF8, "application/json");
-        var response = await _httpClient.PostAsync(url, content);
-        return await response.Content.ReadAsStringAsync();
+        throw new HttpRequestException($"Error posting data: {response.StatusCode}");
     }
 
+
+
+
+
     // PUT Method
-    public async Task<string> Put(string url, string jsonPayload)
+    public async Task<string> Put(HttpContext httpContext, string url, string jsonPayload)
     {
         if (Validation.IsNotValidUrl(url))
             return "Error: URL not valid";
@@ -74,7 +102,7 @@ public class ApiAccess(HttpClient httpClient) : IApiAccess
         return await response.Content.ReadAsStringAsync();
     }
 
-    public async Task<string> DeleteOne(string url, int objectId)
+    public async Task<string> DeleteOne(HttpContext httpContext, string url, int objectId)
     {
         if (Validation.IsNotValidUrl(url))
             return "Error: URL not valid";
@@ -89,7 +117,7 @@ public class ApiAccess(HttpClient httpClient) : IApiAccess
         {
             string fullUrl = $"{url.TrimEnd('/')}/{objectId}";
 
-            var deletedObject = await GetOne(url, objectId);
+            var deletedObject = await GetOne(httpContext, url, objectId);
             var response = await _httpClient.DeleteAsync(fullUrl);
 
             if (response.IsSuccessStatusCode)

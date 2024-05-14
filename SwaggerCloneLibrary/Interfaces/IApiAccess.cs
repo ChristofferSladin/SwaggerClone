@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Microsoft.AspNetCore.Http;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -9,11 +10,11 @@ namespace SwaggerCloneLibrary.Interfaces
 {
     public interface IApiAccess
     {
-        Task<string> Get(string url);
-        Task<string> GetOne(string url, int objectId);
-        Task<string> DeleteOne(string endpoint, int objectId);
-        Task<string> Post(string endpoint, string jsonPayload);
-        Task<string> Put(string endpoint, string jsonPayload);
+        Task<string> Get(HttpContext httpContext, string url);
+        Task<string> GetOne(HttpContext httpContext, string url, int objectId);
+        Task<string> DeleteOne(HttpContext httpContext, string endpoint, int objectId);
+        Task<string> Post(HttpContext httpContext, string url, string jsonPayload);
+        Task<string> Put(HttpContext httpContext, string endpoint, string jsonPayload);
         Task<string> GetJsonTemplate(string url);
     }
 }
