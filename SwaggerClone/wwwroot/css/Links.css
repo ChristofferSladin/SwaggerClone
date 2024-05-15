@@ -1,0 +1,10 @@
+﻿.header-link {
+    font-size: 22px;
+    text-decoration: none;
+    color: #00ff00;
+    cursor: pointer;
+}
+
+    .header-link:hover {
+        color: #9966CC; /* Change text color on hover */
+    }

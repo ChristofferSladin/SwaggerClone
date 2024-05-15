@@ -9,14 +9,14 @@
     <link rel="stylesheet" href="~/css/Index.css" asp-append-version="true" />
     <link rel="stylesheet" href="~/css/Buttons.css" asp-append-version="true" />
     <link rel="stylesheet" href="~/css/InputFields.css" asp-append-version="true" />
+    <link rel="stylesheet" href="~/css/Links.css" asp-append-version="true" />
     <link rel="stylesheet" href="~/SwaggerClone.styles.css" asp-append-version="true" />
 </head>
 <body>
     <div class="d-flex">
-        <a asp-page="/Index">Index</a>
+        <a class="header-link" asp-page="/Index">Index</a>
         <div class="divider"></div>
-        <a asp-page="/Auth">Auth</a>
-        <div class="divider"></div>
+        <a class="header-link" asp-page="/Auth">Auth</a>
     </div>
     <main>
         @RenderBody()
