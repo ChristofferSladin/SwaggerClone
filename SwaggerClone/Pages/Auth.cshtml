@@ -42,7 +42,7 @@
     else
     {
         <div>
-            @Model.TESTING
+            @Model.ErrorMessage
         </div>
     }
 
@@ -63,23 +63,23 @@
             <input type="text" id="apikey" name="ApiKey" class="form-control" required />
         </div>
 
-        <button type="submit" class="btn btn-primary">Create Session Id</button>
+        <button type="submit" class="btn btn-primary">Create Request Token</button>
     </form>
 
 
 
     <!-- Display the Request token -->
-    @if (!string.IsNullOrEmpty(Model.SessionId))
+    @if (!string.IsNullOrEmpty(Model.RequestToken))
     {
         <div class="token-display">
-            <h2>Session Id:</h2>
-            <pre>@Model.SessionId</pre>
+            <h2>Request token:</h2>
+            <pre>@Model.RequestToken</pre>
         </div>
     }
     else
     {
         <div>
-            @Model.TESTING
+            @Model.ErrorMessage
         </div>
     }
 
@@ -88,11 +88,7 @@
     <div class="divider"></div>
 
 
-    <form method="post" asp-page-handler="GetSomething">
-        <div class="form-group">
-            <label for="shorturl">Short Url:</label>
-            <input type="text" id="shorturl" name="ShortUrl" class="form-control" required />
-        </div>
+    <form method="post" asp-page-handler="GetSessionId">
 
         <div class="form-group">
             <label for="apikey">Api Key:</label>
@@ -100,26 +96,25 @@
         </div>
 
         <div class="form-group">
-            <label for="sessionid">Session Id:</label>
-            <input type="text" id="sessionid" name="SessionId" class="form-control" required />
+            <label for="requesttoken">Request Token:</label>
+            <input type="text" id="requesttoken" name="RequestToken" class="form-control" required />
         </div>
 
-
-        <button type="submit" class="btn btn-primary">Get Something</button>
+        <button type="submit" class="btn btn-primary">Get Session Id</button>
     </form>
 
 
-    @if (!string.IsNullOrEmpty(Model.Something))
+    @if (!string.IsNullOrEmpty(Model.SessionId))
     {
         <div class="token-display">
-            <h2>Something:</h2>
-            <pre>@Model.Something</pre>
+            <h2>SessionId:</h2>
+            <pre>@Model.SessionId</pre>
         </div>
     }
     else
     {
         <div>
-            @Model.TESTING
+            @Model.ErrorMessage
         </div>
     }
 </div>

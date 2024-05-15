@@ -37,17 +37,25 @@ public class Helper
         throw new Exception("Failed to create request token.");
     }
 
-    public static async Task<string> GetAsync(string url, string apiKey, string sessionId)
+    public static async Task<string> GetSessionIdAsync(string apiKey, string requestToken)
     {
         var client = new HttpClient();
-        var response = await client.GetAsync($"{url}?api_key={apiKey}&session_id={sessionId}");
+        var content = new StringContent(JsonSerializer.Serialize(new { request_token = requestToken }), Encoding.UTF8, "application/json");
+        var response = await client.PostAsync($"https://api.themoviedb.org/3/authentication/session/new?api_key={apiKey}", content);
 
         if (response.IsSuccessStatusCode)
         {
-            return await response.Content.ReadAsStringAsync();
+            var jsonResponse = await response.Content.ReadAsStringAsync();
+            var sessionResponse = JsonSerializer.Deserialize<SessionResponse>(jsonResponse);
+            return sessionResponse.session_id;
         }
 
-        throw new HttpRequestException("Failed to get account details.");
+        throw new HttpRequestException("Failed to create session ID.");
+    }
+
+    public class SessionResponse
+    {
+        public string session_id { get; set; }
     }
 
     public class RequestTokenResponse

@@ -24,10 +24,8 @@ namespace SwaggerClone.Pages
         [BindProperty] public string TESTING { get; set; }
         [BindProperty] public string RequestTokenUrl { get; set; }
         [BindProperty] public string ApiKey { get; set; }
-        [BindProperty] public string ShortUrl { get; set; }
 
         [BindProperty] public string SessionId { get; set; }
-        [BindProperty] public string Something { get; set; }
 
         [BindProperty] public string RequestToken { get; set; }
         [BindProperty] public string ErrorMessage { get; set; }
@@ -40,11 +38,11 @@ namespace SwaggerClone.Pages
         {
         }
 
-        public async Task<IActionResult> OnPostGetSomethingAsync()
+        public async Task<IActionResult> OnPostGetSessionIdAsync()
         {
             try
             {
-                Something = await Helper.GetAsync(ShortUrl, ApiKey, SessionId);
+                SessionId = await Helper.GetSessionIdAsync(ApiKey, RequestToken);
                 ErrorMessage = null;
             }
             catch (Exception ex)
@@ -56,12 +54,14 @@ namespace SwaggerClone.Pages
 
         public async Task<IActionResult> OnPostCreateRequestTokenAsync()
         {
-            SessionId = await Helper.CreateRequestTokenAsync(RequestTokenUrl, ApiKey);
+            RequestToken = await Helper.CreateRequestTokenAsync(RequestTokenUrl, ApiKey);
             return Page();
         }
 
 
-       
+
+
+
 
 
         public async Task<IActionResult> OnPostAuthenticateAsync()
@@ -98,7 +98,7 @@ namespace SwaggerClone.Pages
             }
             else
             {
-                TESTING = await response.Content.ReadAsStringAsync();
+                ErrorMessage = await response.Content.ReadAsStringAsync();
                 ModelState.AddModelError(string.Empty, "Invalid login attempt.");
             }
 
