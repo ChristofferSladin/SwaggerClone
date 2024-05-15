@@ -1,4 +1,7 @@
 ﻿using SwaggerCloneLibrary.Interfaces;
+using SwaggerCloneLibrary.Models;
+using System.Text.Json;
+using System.Text;
 
 namespace SwaggerCloneLibrary.Services;
 
@@ -24,5 +27,34 @@ public class ApiAuth(HttpClient httpClient) : IApiAuth
 
         throw new HttpRequestException($"Error getting data: {response.StatusCode}");
     }
+    public async Task<string> CreateRequestTokenAsync(string url, string apiKey)
+    {
+        var client = new HttpClient();
+        var response = await client.GetAsync($"{url}{apiKey}");
 
+        if (response.IsSuccessStatusCode)
+        {
+            var jsonResponse = await response.Content.ReadAsStringAsync();
+            var tokenResponse = JsonSerializer.Deserialize<RequestTokenResponse>(jsonResponse);
+            return tokenResponse.request_token;
+        }
+
+        throw new Exception("Failed to create request token.");
+    }
+
+    public async Task<string> GetSessionIdAsync(string url, string apiKey, string requestToken)
+    {
+        var client = new HttpClient();
+        var content = new StringContent(JsonSerializer.Serialize(new { request_token = requestToken }), Encoding.UTF8, "application/json");
+        var response = await client.PostAsync($"{url}?api_key={apiKey}", content);
+
+        if (response.IsSuccessStatusCode)
+        {
+            var jsonResponse = await response.Content.ReadAsStringAsync();
+            var sessionResponse = JsonSerializer.Deserialize<SessionResponse>(jsonResponse);
+            return sessionResponse.session_id;
+        }
+
+        throw new HttpRequestException("Failed to create session ID.");
+    }
 }

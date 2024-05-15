@@ -11,6 +11,8 @@ builder.Services.AddRazorPages();
 builder.Services.AddHttpClient();
 builder.Services.AddSession();
 builder.Services.AddHttpContextAccessor(); // Register IHttpContextAccessor
+builder.Services.AddSingleton<IApiAccess, ApiAccess>();
+builder.Services.AddSingleton<IApiAuth, ApiAuth>();
 
 
 var jwtKey = builder.Configuration["Jwt:Key"];
@@ -35,7 +37,7 @@ builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
                 IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(jwtKey))
             };
         });
-builder.Services.AddSingleton<IApiAccess, ApiAccess>();
+
 
 var app = builder.Build();
 

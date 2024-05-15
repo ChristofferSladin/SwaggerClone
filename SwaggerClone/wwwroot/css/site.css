@@ -22,6 +22,8 @@ textarea {
     padding: 8px;
     width: 100%;
     resize: none;
+    height: 250px;
+    outline: none;
 }
 
     textarea:focus {

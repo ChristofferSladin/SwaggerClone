@@ -8,113 +8,32 @@
     <h1 class="display-4">User Authentication</h1>
     <hr class="divider" />
 
-    <!-- Form for user credentials -->
-    <form method="post" asp-page-handler="Authenticate">
-        <div class="form-group">
-            <label for="email">Email:</label>
-            <input type="text" id="email" name="Email" class="form-control" required />
-        </div>
+    <form method="post">
+        <div class="extended-actions-container">
+            <div class="input-container">
+                <input type="text" id="authurl" name="AuthUrl" required />
+                <label class="label" for="authurl">Endpoint</label>
+                <div class="underline"></div>
+                <div class="sideline"></div>
+                <div class="upperline"></div>
+                <div class="line"></div>
+            </div>
+            <button type="submit" class="fetch-btn" asp-page-handler="Authenticate">Get Token</button>
 
-        <div class="form-group">
-            <label for="password">Password:</label>
-            <input type="password" id="password" name="Password" class="form-control" required />
-        </div>
+            <textarea id="jsonInput" name="JsonInput"></textarea>
 
-        <div class="form-group">
-            <label for="password">Auth Url:</label>
-            <input type="text" id="authurl" name="AuthUrl" class="form-control" required />
         </div>
-
-        <button type="submit" class="btn btn-primary">Get Token</button>
     </form>
 
+    <div class="response-container">
+        @if (Model.Token != null)
+        {
+            <p>JWT Token: @Model.Token</p>
+        }
 
-    
-
-    <!-- Display the JWT token -->
-    @if (!string.IsNullOrEmpty(Model.Token))
-    {
-        <div class="token-display">
-            <h2>JWT Token:</h2>
-            <pre>@Model.Token</pre>
-        </div>
-    }
-    else
-    {
-        <div>
-            @Model.ErrorMessage
-        </div>
-    }
-
-    <div class="divider"></div>    
-    <div class="divider"></div>
-    <div class="divider"></div>
-
-
-
-    <form method="post" asp-page-handler="CreateRequestToken">
-        <div class="form-group">
-            <label for="requesttokenurl">Request Token Url:</label>
-            <input type="text" id="requesttokenurl" name="RequestTokenUrl" class="form-control" required />
-        </div>
-
-        <div class="form-group">
-            <label for="apikey">Api Key:</label>
-            <input type="text" id="apikey" name="ApiKey" class="form-control" required />
-        </div>
-
-        <button type="submit" class="btn btn-primary">Create Request Token</button>
-    </form>
-
-
-
-    <!-- Display the Request token -->
-    @if (!string.IsNullOrEmpty(Model.RequestToken))
-    {
-        <div class="token-display">
-            <h2>Request token:</h2>
-            <pre>@Model.RequestToken</pre>
-        </div>
-    }
-    else
-    {
-        <div>
-            @Model.ErrorMessage
-        </div>
-    }
-
-    <div class="divider"></div>
-    <div class="divider"></div>
-    <div class="divider"></div>
-
-
-    <form method="post" asp-page-handler="GetSessionId">
-
-        <div class="form-group">
-            <label for="apikey">Api Key:</label>
-            <input type="text" id="apikey" name="ApiKey" class="form-control" required />
-        </div>
-
-        <div class="form-group">
-            <label for="requesttoken">Request Token:</label>
-            <input type="text" id="requesttoken" name="RequestToken" class="form-control" required />
-        </div>
-
-        <button type="submit" class="btn btn-primary">Get Session Id</button>
-    </form>
-
-
-    @if (!string.IsNullOrEmpty(Model.SessionId))
-    {
-        <div class="token-display">
-            <h2>SessionId:</h2>
-            <pre>@Model.SessionId</pre>
-        </div>
-    }
-    else
-    {
-        <div>
-            @Model.ErrorMessage
-        </div>
-    }
+        @if (Model.ErrorMessage != null)
+        {
+            <p style="color:red;">Error: @Model.ErrorMessage</p>
+        }
+    </div>
 </div>

@@ -14,9 +14,7 @@ public class IndexModel(ILogger<IndexModel> logger, IApiAccess apiAccess) : Page
     [BindProperty] public int ObjectId { get; set; }
     [BindProperty] public string ApiResponse { get; set; }
     [BindProperty] public string RequestType { get; set; }
-    [BindProperty] public bool UseAuth { get; set; }
     [BindProperty] public string ErrorMessage { get; set; }
-
 
 
     public void OnGet()
@@ -77,16 +75,4 @@ public class IndexModel(ILogger<IndexModel> logger, IApiAccess apiAccess) : Page
         Endpoint = string.Empty;
         return Page();
     }
-
-    //public async Task<IActionResult> OnPostPostAsync(string endpoint, string jsonPayload)
-    //{
-    //    ApiResponse = await _apiAccess.Post(HttpContext, endpoint, jsonPayload);
-    //    return Page();
-    //}
-
-    //public async Task<IActionResult> OnPostPutAsync()
-    //{
-    //    ApiResponse = await _apiAccess.Put(Endpoint, JsonPayload);
-    //    return Page();
-    //}
 }

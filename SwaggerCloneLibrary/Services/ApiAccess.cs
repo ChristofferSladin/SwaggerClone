@@ -22,25 +22,29 @@ public class ApiAccess(HttpClient httpClient, IHttpContextAccessor httpContextAc
 
     public async Task<string> Get(HttpContext httpContext, string url)
     {
+        if (Validation.IsNotValidUrl(url))
+            return "Error: URL not valid";
+
+        if (Validation.IsNotWellFormedUrl(url))
+            return "Error: URL not formed properly";
+
+        var token = GetTokenFromCookies(httpContext);
+
         var request = new HttpRequestMessage(HttpMethod.Get, url);
+        request.Headers.Authorization = new System.Net.Http.Headers.AuthenticationHeaderValue("Bearer", token);
 
         var response = await _httpClient.SendAsync(request);
-        if (response.StatusCode == System.Net.HttpStatusCode.Unauthorized)
-        {
-            var token = GetTokenFromCookies(httpContext);
-            if (string.IsNullOrEmpty(token))
-            {
-                throw new UnauthorizedAccessException("Authorization token is required but not provided.");
-            }
 
-            // Retry with authorization
-            request.Headers.Authorization = new System.Net.Http.Headers.AuthenticationHeaderValue("Bearer", token);
-            response = await _httpClient.SendAsync(request);
+        if (response.StatusCode == HttpStatusCode.Unauthorized)
+        {
+            // Optionally handle token refresh here if needed
+
+            throw new UnauthorizedAccessException("Authorization failed with the provided token.");
         }
 
         if (response.IsSuccessStatusCode)
         {
-            return await response.Content.ReadAsStringAsync();
+            return Helper.FormatJson(await response.Content.ReadAsStringAsync());
         }
 
         throw new HttpRequestException($"Error getting data: {response.StatusCode}");
@@ -57,12 +61,54 @@ public class ApiAccess(HttpClient httpClient, IHttpContextAccessor httpContextAc
         if (objectId > 0)
             url = $"{url}/{objectId}";
 
-        var response = await _httpClient.GetAsync(url);
+        var request = new HttpRequestMessage(HttpMethod.Get, url);
 
+        var response = await _httpClient.SendAsync(request);
+        if (response.StatusCode == HttpStatusCode.Unauthorized)
+        {
+            var token = GetTokenFromCookies(httpContext);
+            if (string.IsNullOrEmpty(token))
+            {
+                throw new UnauthorizedAccessException("Authorization token is required but not provided.");
+            }
+
+            request.Headers.Authorization = new System.Net.Http.Headers.AuthenticationHeaderValue("Bearer", token);
+            response = await _httpClient.SendAsync(request);
+        }
         if (response.IsSuccessStatusCode)
             return Helper.FormatJson(await response.Content.ReadAsStringAsync());
 
-        else return $"Error: {response.RequestMessage} Statuscode: {response.StatusCode}";
+        throw new HttpRequestException($"Error getting data: {response.StatusCode}");
+    }
+
+    public async Task<string> DeleteOne(HttpContext httpContext, string url, int objectId)
+    {
+        if (Validation.IsNotValidUrl(url))
+            return "Error: URL not valid";
+
+        if (Validation.IsNotWellFormedUrl(url))
+            return "Error: URL not formed properly";
+
+        if (objectId <= 0)
+            return $"Error: The object does not exist";
+
+        try
+        {
+            string fullUrl = $"{url.TrimEnd('/')}/{objectId}";
+
+            var deletedObject = await GetOne(httpContext, url, objectId);
+            var response = await _httpClient.DeleteAsync(fullUrl);
+
+            if (response.IsSuccessStatusCode)
+                return $"Object successfully deleted:\n\n{deletedObject}";
+
+            else
+                return $"Error: {response.StatusCode} - {response.ReasonPhrase}";
+        }
+        catch (Exception ex)
+        {
+            return $"Error: {ex.Message}";
+        }
     }
 
 
@@ -102,35 +148,7 @@ public class ApiAccess(HttpClient httpClient, IHttpContextAccessor httpContextAc
         return await response.Content.ReadAsStringAsync();
     }
 
-    public async Task<string> DeleteOne(HttpContext httpContext, string url, int objectId)
-    {
-        if (Validation.IsNotValidUrl(url))
-            return "Error: URL not valid";
-
-        if (Validation.IsNotWellFormedUrl(url))
-            return "Error: URL not formed properly";
-
-        if (objectId <= 0)
-            return $"Error: The object does not exist";
-
-        try
-        {
-            string fullUrl = $"{url.TrimEnd('/')}/{objectId}";
-
-            var deletedObject = await GetOne(httpContext, url, objectId);
-            var response = await _httpClient.DeleteAsync(fullUrl);
-
-            if (response.IsSuccessStatusCode)
-                return $"Object successfully deleted:\n\n{deletedObject}";
-
-            else
-                return $"Error: {response.StatusCode} - {response.ReasonPhrase}";
-        }
-        catch (Exception ex)
-        {
-            return $"Error: {ex.Message}";
-        }
-    }
+   
 
     public async Task<string> GetJsonTemplate(string url)
     {
