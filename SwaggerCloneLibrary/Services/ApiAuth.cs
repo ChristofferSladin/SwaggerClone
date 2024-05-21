@@ -2,6 +2,7 @@
 using SwaggerCloneLibrary.Models;
 using System.Text.Json;
 using System.Text;
+using System.Text.RegularExpressions;
 
 namespace SwaggerCloneLibrary.Services;
 
@@ -40,6 +41,19 @@ public class ApiAuth(HttpClient httpClient) : IApiAuth
         }
 
         throw new Exception("Failed to create request token.");
+    }
+
+    public string ExtractJwtToken(string responseBody)
+    {
+        string pattern = @"[A-Za-z0-9-_]+\.[A-Za-z0-9-_]+\.[A-Za-z0-9-_]+";
+        Regex regex = new Regex(pattern);
+
+        Match match = regex.Match(responseBody);
+
+        if (match.Success)
+            return match.Value;
+
+        return null;
     }
 
     public async Task<string> GetSessionIdAsync(string url, string apiKey, string requestToken)

@@ -7,14 +7,21 @@ using SwaggerCloneLibrary.Utility;
 using System.Net.Http;
 using System.Text;
 using System.Text.Json;
+using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 
 namespace SwaggerClone.Pages
 {
-    public class AuthModel(IHttpClientFactory httpClientFactory, IApiAuth apiAuth) : PageModel
+    public class AuthModel : PageModel
     {
-        private readonly IHttpClientFactory _httpClientFactory = httpClientFactory;
-        private readonly IApiAuth _apiAuth = apiAuth;
+        private readonly IHttpClientFactory _httpClientFactory;
+        private readonly IApiAuth _apiAuth;
+
+        public AuthModel(IHttpClientFactory httpClientFactory, IApiAuth apiAuth)
+        {
+            _httpClientFactory = httpClientFactory;
+            _apiAuth = apiAuth;
+        }
 
         [BindProperty] public string AuthUrl { get; set; }
         [BindProperty] public string ErrorMessage { get; set; }
@@ -36,16 +43,23 @@ namespace SwaggerClone.Pages
             if (response.IsSuccessStatusCode)
             {
                 var jsonResponse = await response.Content.ReadAsStringAsync();
-                var authResponse = JsonSerializer.Deserialize<AuthResponse>(jsonResponse);
-                Token = authResponse?.token;
+                Token = _apiAuth.ExtractJwtToken(jsonResponse);
 
-                var cookieOptions = new CookieOptions
+                if (!string.IsNullOrEmpty(Token))
                 {
-                    HttpOnly = true,
-                    Secure = true, 
-                    Expires = DateTime.UtcNow.AddHours(1) 
-                };
-                Response.Cookies.Append("JWTToken", Token, cookieOptions);
+                    var cookieOptions = new CookieOptions
+                    {
+                        HttpOnly = true,
+                        Secure = true,
+                        Expires = DateTime.UtcNow.AddHours(1)
+                    };
+                    Response.Cookies.Append("JWTToken", Token, cookieOptions);
+                }
+                else
+                {
+                    ErrorMessage = "JWT token not found in the response.";
+                    ModelState.AddModelError(string.Empty, "Invalid login attempt.");
+                }
             }
             else
             {
