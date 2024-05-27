@@ -28,19 +28,5 @@
 
     @await RenderSectionAsync("Scripts", required: false)
 
-    <script>
-        function saveToken() {
-            var token = document.getElementById('tokenInput').value;
-            document.cookie = "JWTToken=" + token + "; path=/";
-        }
-
-        function getCookie(name) {
-            let matches = document.cookie.match(new RegExp(
-                "(?:^|; )" + name.replace(/([\.$?*|{}\(\)\[\]\\\/\+^])/g, '\\$1') + "=([^;]*)"
-            ));
-            return matches ? decodeURIComponent(matches[1]) : undefined;
-        }
-    </script>
-
 </body>
 </html>
