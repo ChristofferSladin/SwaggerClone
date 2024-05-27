@@ -1,0 +1,4 @@
+{
+    "appService.defaultWebAppToDeploy": "/subscriptions/0b8756a2-d177-4132-adc7-b539ba6599c8/resourceGroups/SwaggerClone/providers/Microsoft.Web/sites/SwaggerCloneCS",
+    "appService.deploySubpath": "SwaggerClone"
+}
