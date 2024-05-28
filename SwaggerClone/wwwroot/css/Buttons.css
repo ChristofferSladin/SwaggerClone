@@ -10,7 +10,6 @@
     text-decoration: none;
     outline: 0;
     border: none;
-    margin-left: 10px;
 }
 
     .fetch-btn:after {
@@ -35,4 +34,29 @@
     justify-content: flex-end;
     align-items: center;
     margin-right: 40px;
+}
+
+.collapsible-container {
+    width: 80%;
+    border: 1px solid #00ff00;
+    margin: 0 auto;
+}
+
+.collapsible-title {
+    color: #9966CC;
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+}
+
+.collapsible-header {
+    background-color: transparent;
+    cursor: pointer;
+    padding: 10px;
+}
+
+.collapsible-content {
+    display: none;
+    padding: 10px;
 }

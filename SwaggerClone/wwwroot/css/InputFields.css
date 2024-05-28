@@ -1,100 +1,51 @@
-﻿
-.input-container {
+﻿.form {
+    --width-of-input: 450px;
+    --border-height: 1px;
+    --border-before-color: transparent;
+    --border-after-color: #00ff00;
+    --input-hovered-color: transparent;
     position: relative;
-    margin-left: 10px;
-    margin-right: 10px;
-    width: 500px;
+    width: var(--width-of-input);
 }
-
-    .input-container input[type="text"] {
-        border: none;
-        color: #fff;
-        border-bottom: 2px solid #00ff00;
-        outline: none;
-        width: 100%;
-        background-color: transparent;
-    }
-
-.label {
-    transition: all 0.1s ease;
-    position: absolute;
-    top: 0;
-    left: 0;
-    pointer-events: none;
-}
-
-.input-container input[type="text"]:focus ~ .label,
-.input-container input[type="text"]:valid ~ .label {
-    top: -20px;
-    transition: 0.3s;
+/* styling of Input */
+.input {
     color: #00ff00;
+    font-size: 0.9rem;
+    background-color: transparent;
+    width: 100%;
+    box-sizing: border-box;
+    padding-inline: 0.5em;
+    padding-block: 0.7em;
+    border: 1px solid #00ff00;
+    border-bottom: var(--border-height) solid var(--border-before-color);
 }
-
-.input-container .underline {
+/* styling of animated border */
+.input-border {
     position: absolute;
-    bottom: 4px;
-    left: -10px;
+    background: var(--border-after-color);
+    width: 0%;
     height: 2px;
-    width: 110%;
-    background-color: #00ff00;
-    transform: scaleX(0);
-}
-
-.input-container .sideline {
-    position: relative;
-    bottom: 24px;
-    right: 50px;
-    height: 2px;
-    width: 18%;
-    background-color: #00ff00;
-    transform: scaleX(0);
-    rotate: 90deg;
-}
-
-.input-container .upperline {
-    position: absolute;
-    bottom: 30px;
-    left: -10px;
-    height: 2px;
-    width: 110%;
-    background-color: #00ff00;
-    transform: scaleX(0);
-}
-
-.input-container .line {
-    position: relative;
-    bottom: 26px;
-    left: 490px;
-    height: 2px;
-    width: 18%;
-    background-color: #00ff00;
-    transform: scaleX(0);
-    rotate: 90deg;
-}
-
-.input-container input[type="text"]:focus ~ .underline,
-.input-container input[type="text"]:valid ~ .underline {
-    transform: scaleX(1);
-    transition: 0.1s;
-}
-
-.input-container input[type="text"]:focus ~ .sideline,
-.input-container input[type="text"]:valid ~ .sideline {
-    transform: scaleX(0.5);
+    bottom: 0;
+    left: 0;
     transition: 0.3s;
 }
-
-.input-container input[type="text"]:focus ~ .upperline,
-.input-container input[type="text"]:valid ~ .upperline {
-    transform: scaleX(1);
-    transition: 0.7s;
+/* Hover on Input */
+input:hover {
+    background: var(--input-hovered-color);
 }
 
-.input-container input[type="text"]:focus ~ .line,
-.input-container input[type="text"]:valid ~ .line {
-    transform: scaleX(0.5);
-    transition: 0.3s;
+input:focus {
+    outline: none;
 }
+    /* here is code of animated border */
+    input:focus ~ .input-border {
+        width: 100%;
+    }
+/* === if you want to do animated border on typing === */
+/* remove input:focus code and uncomment below code */
+/* input:valid ~ .input-border{
+  width: 100%;
+} */
 
 .objectId-input {
     width: 50px;

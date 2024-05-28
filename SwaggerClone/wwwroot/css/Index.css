@@ -1,9 +1,4 @@
-﻿.main-container {
-    margin: auto;
-    width: 100%;
-    text-align: center;
-}
-
+﻿
 .title {
     display: flex;
     justify-content: flex-start;
@@ -76,11 +71,15 @@
 }
 
 .response-container {
+    background: linear-gradient(135deg, #0c0c0c, #000);
+    color: #00ff00;
     border: 1px solid #00ff00;
-    width: 90%;
-    height: 300px;
+    padding: 8px;
+    width: 100%;
+    resize: none;
+    height: 250px;
+    outline: none;
     overflow-y: scroll;
-    margin: auto;
 }
 
 .response-display {

@@ -18,7 +18,7 @@ public class Helper
         }
         catch
         {
-            return json;
+            throw new Exception();
         }
     }
 }

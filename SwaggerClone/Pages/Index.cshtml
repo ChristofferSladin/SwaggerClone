@@ -1,90 +1,184 @@
 ﻿@page
 @model IndexModel
 @{
-    ViewData["Title"] = "Home page";
 }
 
-<div class="main-container text-center">
-    <div class="d-flex justify-content-between">
-        <div class="title">
-            <h1 class="display-4 title">Swagger Clone</h1>
-        </div>
-        <div class="reset-btn-container">
-            <form method="post" asp-page-handler="Reset">
-                <button class="fetch-btn" type="submit">Reset</button>
-            </form>
+<div class="d-flex justify-content-between" style="margin: 0 auto;">
+    <div class="title">
+        <h1 class="display-4 title">Swagger Clone</h1>
+    </div>
+    <div class="reset-btn-container">
+        <form method="post" asp-page-handler="Reset">
+            <button class="fetch-btn" type="submit">Reset</button>
+        </form>
+    </div>
+</div>
+
+<hr class="divider" />
+
+<div class="collapsible-container">
+    <div class="collapsible-header" onclick="toggleCollapse('collapse1')">
+        <div class="collapsible-title">Request Format</div>
+    </div>
+    <div id="collapse1" class="collapsible-content">
+        <form method="post" novalidate>
+            <div class="d-flex justify-content-start">
+                <div class="form">
+                    <input id="apiEndpoint" class="input" name="Endpoint" placeholder="Url" required="" type="text">
+                    <span class="input-border"></span>
+                </div>
+                <button type="submit" class="fetch-btn" asp-page-handler="FetchJsonTemplate">Get JSON Structure</button>
+            </div>
+
+            <textarea class="jsonRequestBody" id="jsonPayload" name="JsonPayload">@Model.JsonPayload</textarea>
+
+            @await Html.PartialAsync("_HiddenFields", Model)
+        </form>
+    </div>
+</div>
+
+<hr class="divider" />
+
+<div class="collapsible-container">
+    <div class="collapsible-header" onclick="toggleCollapse('collapse2')">
+        <span class="collapsible-title">GET</span>
+    </div>
+    <div id="collapse2" class="collapsible-content">
+
+        <form method="post">
+            <div class="d-flex justify-content-start">
+                <div class="form">
+                    <input id="apiEndpoint" class="input" name="Endpoint" placeholder="Url" required="" type="text">
+                    <span class="input-border"></span>
+                </div>
+                <button asp-page-handler="Get" class="fetch-btn" type="submit">Get</button>
+            </div>
+
+            @await Html.PartialAsync("_HiddenFields", Model)
+        </form>
+
+        <div class="response-container">
+            @if (!string.IsNullOrEmpty(Model.GetResponse))
+            {
+                <pre class="response-display">@Html.Raw(Model.GetResponse)</pre>
+            }
+            else if (!string.IsNullOrEmpty(Model.ErrorMessage))
+            {
+                <div class="response-error">@Model.ErrorMessage</div>
+            }
         </div>
     </div>
+</div>
 
-    <hr class="divider" />
+<hr class="divider" />
 
-    <div class="extended-actions-container">
-        <form method="post" asp-page-handler="Execute">
-            <div class="d-flex justify-content-around">
-                <div class="form-group">
-                    <div class="input-container">
-                        <input required id="input" name="Endpoint" type="text">
-                        <label class="label" for="input">Endpoint</label>
-                        <div class="underline"></div>
-                        <div class="sideline"></div>
-                        <div class="upperline"></div>
-                        <div class="line"></div>
-                    </div>
+<div class="collapsible-container">
+    <div class="collapsible-header" onclick="toggleCollapse('collapse3')">
+        <span class="collapsible-title">DELETE</span>
+    </div>
+    <div id="collapse3" class="collapsible-content">
+        <form method="post" novalidate>
+            <div class="d-flex justify-content-start">
+
+                <div class="form">
+                    <input id="apiEndpoint" class="input" name="Endpoint" placeholder="Url" required="" type="text">
+                    <span class="input-border"></span>
                 </div>
-                <div class="form-group">
-                    <div class="custom-select">
-                        <select id="requestType" name="RequestType" required>
-                            <option value="GET">GET</option>
-                            <option value="DELETE">DELETE</option>
-                        </select>
-                    </div>
-                </div>
+
                 <div class="delete-container">
-
                     <div class="delete-holder">
                         <div>ID:</div>
                         <input required type="number" id="objectId" class="objectId-input" name="ObjectId" value="@Model.ObjectId">
                     </div>
                 </div>
-                <input type="hidden" name="JsonPayload" value="@Model.JsonPayload" />
-                <button class="fetch-btn" type="submit">Execute</button>
+
+                <button type="submit" class="fetch-btn" asp-page-handler="Delete">Delete</button>
             </div>
+
+            @await Html.PartialAsync("_HiddenFields", Model)
         </form>
-    </div>
 
-    <div class="response-container">
-        @if (!string.IsNullOrEmpty(Model.ApiResponse))
-        {
-            <pre class="response-display">@Html.Raw(Model.ApiResponse)</pre>
-        }
-        else if (!string.IsNullOrEmpty(Model.ErrorMessage))
-        {
-            <div class="response-error">@Model.ErrorMessage</div>
-        }
-        else
-        {
-            <div class="response-empty">No response data to display.</div>
-        }
-    </div>
-
-    <hr class="divider" />
-
-    <form method="post" novalidate>
-        <div class="extended-actions-container">
-            <div class="input-container">
-                <input required type="text" id="apiEndpoint" name="Endpoint">
-                <label class="label" for="endpointInput">Endpoint</label>
-                <div class="underline"></div>
-                <div class="sideline"></div>
-                <div class="upperline"></div>
-                <div class="line"></div>
-            </div>
-            <textarea id="jsonPayload" name="JsonPayload">@Model.JsonPayload</textarea>
-            <input type="hidden" name="ApiResponse" value="@Model.ApiResponse" />
-            <button type="submit" class="fetch-btn" asp-page-handler="FetchJsonTemplate">Get JSON Structure</button>
-            <button class="fetch-btn" type="submit" asp-page-handler="Post">POST</button>
-            <button class="fetch-btn" type="submit" asp-page-handler="Put">PUT</button>
+        <div class="response-container">
+            @if (!string.IsNullOrEmpty(Model.DeleteResponse))
+            {
+                <pre class="response-display">@Html.Raw(Model.DeleteResponse)</pre>
+            }
+            else if (!string.IsNullOrEmpty(Model.ErrorMessage))
+            {
+                <div class="response-error">@Model.ErrorMessage</div>
+            }
         </div>
-    </form>
+    </div>
 </div>
 
+<hr class="divider" />
+
+<div class="collapsible-container">
+    <div class="collapsible-header" onclick="toggleCollapse('collapse4')">
+        <span class="collapsible-title">POST</span>
+    </div>
+    <div id="collapse4" class="collapsible-content">
+        <form method="post" novalidate>
+            <div class="d-flex justify-content-start">
+                <div class="form">
+                    <input id="apiEndpoint" class="input" name="Endpoint" placeholder="Url" required="" type="text">
+                    <span class="input-border"></span>
+                </div>
+
+                <button class="fetch-btn" type="submit" asp-page-handler="Post">POST</button>
+            </div>
+
+            <textarea id="jsonPayload" name="Postrequestbody">@Model.PostRequestBody</textarea>
+
+            @await Html.PartialAsync("_HiddenFields", Model)
+        </form>
+
+        <div class="response-container">
+            @if (!string.IsNullOrEmpty(Model.PostResponse))
+            {
+                <pre class="response-display">@Html.Raw(Model.PostResponse)</pre>
+            }
+            else if (!string.IsNullOrEmpty(Model.ErrorMessage))
+            {
+                <div class="response-error">@Model.ErrorMessage</div>
+            }
+        </div>
+    </div>
+</div>
+
+<hr class="divider" />
+
+<div class="collapsible-container">
+    <div class="collapsible-header" onclick="toggleCollapse('collapse5')">
+        <span class="collapsible-title">PUT</span>
+    </div>
+    <div id="collapse5" class="collapsible-content">
+        <form method="post" novalidate>
+            <div class="d-flex justify-content-start">
+                <div class="form">
+                    <input id="apiEndpoint" class="input" name="Endpoint" placeholder="Url" required="" type="text">
+                    <span class="input-border"></span>
+                </div>
+
+                <button class="fetch-btn" type="submit" asp-page-handler="Put">PUT</button>
+            </div>
+
+            <textarea id="jsonPayload" name="Putrequestbody">@Model.PutRequestBody</textarea>
+
+            @await Html.PartialAsync("_HiddenFields", Model)
+        </form>
+
+        <div class="response-container">
+            @if (!string.IsNullOrEmpty(Model.PutResponse))
+            {
+                <pre class="response-display">@Html.Raw(Model.PutResponse)</pre>
+            }
+            else if (!string.IsNullOrEmpty(Model.ErrorMessage))
+            {
+                <div class="response-error">@Model.ErrorMessage</div>
+            }
+        </div>
+    </div>
+</div>
+
+<hr class="divider" />

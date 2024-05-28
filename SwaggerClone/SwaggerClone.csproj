@@ -14,4 +14,8 @@
     <ProjectReference Include="..\SwaggerCloneLibrary\SwaggerCloneLibrary.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="Pages\PageModels\" />
+  </ItemGroup>
+
 </Project>
